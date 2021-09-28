@@ -1,9 +1,6 @@
 set -ex
 
-rm -rf demofiles
-rm -rf notebooks
-rm -rf narrative
-rm -rf slides
+git clone http://github.com/frankyeh/TIPL
 jupyter lab clean
 
 # Setup a workspace
