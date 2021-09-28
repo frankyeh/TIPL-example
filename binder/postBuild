@@ -1,7 +1,5 @@
 set -ex
 
-git clone http://github.com/frankyeh/TIPL
+git clone http://github.com/frankyeh/TIPL/
 jupyter lab clean
-
-# Setup a workspace
 jupyter lab workspaces import binder/workspace.json
