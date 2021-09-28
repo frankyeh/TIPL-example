@@ -4,7 +4,6 @@ rm -rf demofiles
 rm -rf notebooks
 rm -rf narrative
 rm -rf slides
-rm demo/notebooks/Julia.ipynb
 jupyter lab clean
 
 # Setup a workspace
