@@ -33,4 +33,3 @@ dependencies:
 - xtensor=0.23.10
 - xtensor-blas=0.19.1
 - xwidgets=0.26.1
-- xleaflet=0.16.0
