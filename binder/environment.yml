@@ -32,4 +32,5 @@ dependencies:
 - xeus-cling=0.13
 - xtensor=0.23.10
 - xtensor-blas=0.19.1
-- xwidgets=0.26.1
+- xwidgets=0.24.2
+- xleaflet=0.13.1
