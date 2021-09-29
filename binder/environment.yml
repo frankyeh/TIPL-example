@@ -29,8 +29,8 @@ dependencies:
 - traittypes==0.2.1
 - invoke=1.2
 # C++ Kernel
-- xeus-cling=0.10
-- xtensor=0.20.8
-- xtensor-blas=0.16.1
-- xwidgets=0.24.2
-- xleaflet=0.13.1
+- xeus-cling=0.13
+- xtensor=0.23.10
+- xtensor-blas=0.19.1
+- xwidgets=0.26.1
+- xleaflet=0.16.0
