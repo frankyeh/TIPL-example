@@ -27,7 +27,6 @@ dependencies:
 - sympy=1.4
 - pyyaml
 - traittypes==0.2.1
-- invoke=1.2
 # C++ Kernel
 - xeus-cling=0.11
 - xtensor=0.20.8
