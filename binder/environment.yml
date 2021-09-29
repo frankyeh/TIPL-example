@@ -13,7 +13,7 @@ dependencies:
 - xeus-python=0.9
 - ipywidgets=7.6
 - widgetsnbextension=3.5
-- ipyleaflet=0.13
+- ipyleaflet=0.14
 - altair=4.1
 - bqplot=0.12.20
 - dask=2020.12
@@ -33,4 +33,4 @@ dependencies:
 - xtensor=0.23.0
 - xtensor-blas=0.19.0
 - xwidgets=0.25.0
-- xleaflet=0.14.0
+- xleaflet=0.15
