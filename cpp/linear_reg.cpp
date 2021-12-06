@@ -5,18 +5,10 @@ int main(void)
     tipl::vector<3> vs_s,vs_t; // voxel size
 
     tipl::io::nifti nii_s,nii_t;
-
-    std::cout << "loading template t1w" << std::endl;
-    if(!nii_t.load_from_file("./TIPL-example/data/mni_icbm152_t1.nii"))
+    if(!nii_t.load_from_file("./TIPL-example/data/mni_icbm152_t1.nii") ||
+       !nii_s.load_from_file("./TIPL-example/data/100206_T1w.nii"))
     {
-        std::cout << "cannot open template t1w" << std::endl;
-        return 1;
-    }
-
-    std::cout << "loading subject t1w" << std::endl;
-    if(!nii_s.load_from_file("./TIPL-example/data/100206_T1w.nii"))
-    {
-        std::cout << "cannot open subject t1w" << std::endl;
+        std::cout << "cannot open data" << std::endl;
         return 1;
     }
 
@@ -27,8 +19,8 @@ int main(void)
     nii_t.get_voxel_size(vs_t);
     nii_s.get_voxel_size(vs_s);
 
-    tipl::affine_transform<double> T;
-    std::cout << "running linear registration using mutual information" << std::endl;
+    tipl::affine_transform<float> T;
+    std::cout << "running linear registration using correlation" << std::endl;
     bool terminated = false;
     tipl::reg::linear(It,vs_t,Is,vs_s,T,
                                  tipl::reg::affine,
