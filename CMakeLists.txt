@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.17)
+project(TIPL-example VERSION 1.0.0 LANGUAGES CXX)
+include(CTest)
+find_package(TIPL REQUIRED)
+add_subdirectory(cpp)
