@@ -22,9 +22,8 @@ int main(void)
     tipl::affine_transform<float> T;
     std::cout << "running linear registration using correlation" << std::endl;
     bool terminated = false;
-    tipl::reg::linear(It,vs_t,Is,vs_s,T,
+    tipl::reg::linear<tipl::reg::correlation>(It,vs_t,Is,vs_s,T,
                                  tipl::reg::affine,
-                                 tipl::reg::correlation(),
                                  terminated,0.01);
 
     std::cout << T;
