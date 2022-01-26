@@ -31,24 +31,22 @@ int main(void)
     trans.shift[2] = 0;
 
     // 4: image resample using cpu
-    auto p = std::chrono::high_resolution_clock::now();
+    tipl::time t;
     {
         hto.resize(hfrom.shape());
         tipl::resample_mt(hfrom,hto,trans);
     }
-    std::cout << "cpu resample:" << std::chrono::duration_cast<std::chrono::microseconds>
-                 (std::chrono::high_resolution_clock::now()-p).count() << std::endl;
+    std::cout << "cpu resample:" << t.elapsed<std::chrono::microseconds>() << std::endl;
     // save to file
     hto.save_to_file<tipl::io::nifti>("cpu.nii");
 
     // 5: image resample using gpu
-    p = std::chrono::high_resolution_clock::now();
+    t.restart();
     {
         dto.resize(dfrom.shape());
         tipl::resample_cuda(dfrom,dto,trans);
     }
-    std::cout << "gpu resample time:" << std::chrono::duration_cast<std::chrono::microseconds>
-                 (std::chrono::high_resolution_clock::now()-p).count() << std::endl;  
+    std::cout << "gpu resample time:" << t.elapsed<std::chrono::microseconds>() << std::endl;
     // copy device image to host and save
     tipl::image<3,float,tipl::host_memory>(dto).save_to_file<tipl::io::nifti>("gpu.nii");
 
