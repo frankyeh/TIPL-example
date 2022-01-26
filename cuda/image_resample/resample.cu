@@ -8,7 +8,7 @@ int main(void)
 {
 
     // 1: load example image
-    tipl::image<3,float,tipl::host_memory> hfrom,hto;
+    tipl::host_image<3> hfrom,hto;
     if(!hfrom.load_from_file<tipl::io::nifti>("100206_T1w.nii"))
     {
         std::cout << "cannot find the sample file" << std::endl;
@@ -16,7 +16,7 @@ int main(void)
     }
 
     // 2: copy host image to device image
-    tipl::image<3,float,tipl::device_memory> dfrom(hfrom),dto;  //device memory image
+    tipl::device_image<3> dfrom(hfrom),dto;  //device memory image
 
 
     // 3: setup the transformation matrix
@@ -48,7 +48,7 @@ int main(void)
     }
     std::cout << "gpu resample time:" << t.elapsed<std::chrono::microseconds>() << std::endl;
     // copy device image to host and save
-    tipl::image<3,float,tipl::host_memory>(dto).save_to_file<tipl::io::nifti>("gpu.nii");
+    tipl::host_image<3>(dto).save_to_file<tipl::io::nifti>("gpu.nii");
 
     return 0;
 }
