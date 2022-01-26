@@ -45,6 +45,7 @@ int main(void)
         std::cout << "cpu time (ms):" << t.elapsed<std::chrono::milliseconds>() << std::endl;
         std::cout << "cpu answer:\n" << answer << std::endl;
     }
+
     {
         // solve using gpu
         tipl::time t;
