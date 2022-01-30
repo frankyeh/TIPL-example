@@ -23,26 +23,24 @@ int main(void)
 
     // use single thread
     {
-        tipl::time t;
+        tipl::time t("single thread time:");
 
         for(size_t i = 0;i < hfrom.size();++i)
             if(hfrom[i] > 0)
                 hto[i] = hfrom[i]*5.5f+100.0f;
 
-        std::cout << "single thread time:" << t.elapsed<std::chrono::milliseconds>() << std::endl;
     }
     // use multi thread
     {
-        tipl::time t;
+        tipl::time t("simple multithread time:");
 
         (hto = hfrom[hfrom > 0]*5.5f+100.0f)
                 >> tipl::backend::mt();
 
-        std::cout << "plain multithread time:" << t.elapsed<std::chrono::milliseconds>() << std::endl;
     }
     // use multi thread
     {
-        tipl::time t;
+        tipl::time t("par_for multi-thread time:");
 
         tipl::par_for(hfrom.size(),[&](size_t i)
         {
@@ -50,22 +48,18 @@ int main(void)
                 hto[i] = hfrom[i]*5.5f+100.0f;
         });
 
-        std::cout << "par_for multi-thread time:" << t.elapsed<std::chrono::milliseconds>() << std::endl;
     }
-
+    // use cuda
     {
         auto from = tipl::make_alias(dfrom);
         auto to = tipl::make_alias(dto);
-        tipl::time t;
+        tipl::time t("cuda_for time:");
 
         tipl::cuda_for(from.size(),[=]__device__(size_t i)
         {
            if(from[i] > 0)
                to[i] = from[i]*5.5f+100.0f;
         });
-
-
-        std::cout << "cuda_for time:" << t.elapsed<std::chrono::milliseconds>() << std::endl;
         std::cout << cudaGetErrorName(cudaGetLastError()) << std::endl;
     }
 
