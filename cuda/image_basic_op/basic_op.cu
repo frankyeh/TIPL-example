@@ -49,6 +49,7 @@ int main(void)
             if(hfrom[i] > 0)
                 hto[i] = hfrom[i]*5.5f+100.0f;
         });
+
         std::cout << "par_for multi-thread time:" << t.elapsed<std::chrono::milliseconds>() << std::endl;
     }
 
@@ -63,19 +64,10 @@ int main(void)
                to[i] = from[i]*5.5f+100.0f;
         });
 
-        cudaDeviceSynchronize();
+
         std::cout << "cuda_for time:" << t.elapsed<std::chrono::milliseconds>() << std::endl;
         std::cout << cudaGetErrorName(cudaGetLastError()) << std::endl;
     }
 
-    /*
-     * {
-        tipl::device_image<3> dto(hfrom);
-        auto dto_alias = tipl::make_alias(dto);
-        tipl::time t;
-        // smooth each region
-        std::cout << "gpu time:" << t.elapsed<std::chrono::milliseconds>() << std::endl;
-        hto.save_to_file<tipl::io::nifti>("Brainnectome_atlas_smoothed.nii");
-    }*/
     return 0;
 }
