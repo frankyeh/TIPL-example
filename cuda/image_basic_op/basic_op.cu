@@ -55,9 +55,9 @@ int main(void)
         auto to = tipl::make_alias(dto);
         tipl::time t("cuda_for time:");
 
-        tipl::cuda_for(from.size(),[=]__device__(size_t i)
+        tipl::cuda_for(from.size(),[=]__device__(size_t i) mutable
         {
-           if(from[i] > 0)
+            if(from[i] > 0)
                to[i] = from[i]*5.5f+100.0f;
         });
         std::cout << cudaGetErrorName(cudaGetLastError()) << std::endl;
