@@ -38,21 +38,19 @@ int main(void)
 
     {
         // solve using cpu
-        tipl::time t;
+        tipl::time t("cpu time (ms):");
         tipl::affine_transform<float> answer;
         tipl::reg::linear_mr<tipl::reg::mutual_information> // use cpu multithread to calculate the cost function
                 (hto,voxel_size,hfrom,voxel_size,answer,tipl::reg::affine,terminated,0.001);
-        std::cout << "cpu time (ms):" << t.elapsed<std::chrono::milliseconds>() << std::endl;
         std::cout << "cpu answer:\n" << answer << std::endl;
     }
 
     {
         // solve using gpu
-        tipl::time t;
+        tipl::time t("gpu time (ms):");
         tipl::affine_transform<float> answer;
         tipl::reg::linear_mr<tipl::reg::mutual_information_cuda> // use cuda to calculate the cost function
                 (hto,voxel_size,hfrom,voxel_size,answer,tipl::reg::affine,terminated,0.001);
-        std::cout << "gpu time (ms):" << t.elapsed<std::chrono::milliseconds>() << std::endl;
         std::cout << "gpu answer:\n" << answer << std::endl;
         std::cout << cudaGetErrorName(cudaGetLastError()) << std::endl;
     }
