@@ -18,14 +18,7 @@ int main(void)
 
     // 2: setup the transformation for linear registration algorithms to solve
 
-    tipl::affine_transform<float> affine;
-    affine.translocation[0] = 15.0f;
-    affine.rotation[0] = 0.1f;
-    affine.rotation[1] = 0.02f;
-    affine.scaling[0] = 1.1f;
-    affine.scaling[1] = 1.2f;
-    affine.scaling[0] = 0.95f;
-    affine.affine[0] = 0.02f;
+    tipl::affine_transform<float> affine = {15.0,0,0,0.1f,0.02f,0,1.1f,1.2f,0.95f,0.02f,0,0};
     std::cout << "ground truth=\n" << affine << std::endl;
 
     // 3: get the transformed image
