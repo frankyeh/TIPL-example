@@ -51,8 +51,8 @@ int main(void)
     }
     // use cuda
     {
-        auto from = tipl::make_alias(dfrom);
-        auto to = tipl::make_alias(dto);
+        auto from = tipl::make_shared(dfrom);
+        auto to = tipl::make_shared(dto);
         tipl::time t("cuda_for time:");
 
         tipl::cuda_for(from.size(),[=]__device__(size_t i) mutable
