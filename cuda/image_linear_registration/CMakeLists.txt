@@ -16,12 +16,11 @@ set_target_properties(tipl_image_linear_registration PROPERTIES CXX_STANDARD 17 
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -allow-unsupported-compiler --extended-lambda")
 
 target_compile_definitions(tipl_image_linear_registration PUBLIC TIPL_USE_CUDA)
-find_package(TIPL)
-if ( NOT TIPL_FOUND )
-  if(EXISTS "${TIPL_DIR}")
-    target_include_directories(tipl_image_linear_registration ${TIPL_DIR})
-  endif()
+
+if(EXISTS "${TIPL_DIR}")
+  include_directories(tipl_image_linear_registration ${TIPL_DIR})
 else()
+  find_package(TIPL REQUIRED)
   target_link_libraries(tipl_image_linear_registration TIPL::tipl)
 endif()
 
