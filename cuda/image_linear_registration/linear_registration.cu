@@ -1,4 +1,4 @@
-#include "tipl/tipl.hpp"
+#include "TIPL/tipl.hpp"
 #include <iostream>
 #include <cuda.h>
 #include <cuda_runtime.h>
@@ -28,7 +28,6 @@ int main(void)
 
     // 4: now use transformed image to calculate the transformation
     bool terminated = false;
-
     {
         // solve using cpu
         tipl::time t("cpu time (ms):");
@@ -37,7 +36,6 @@ int main(void)
                 (hto,voxel_size,hfrom,voxel_size,answer,tipl::reg::affine,terminated,0.001);
         std::cout << "cpu answer:\n" << answer << std::endl;
     }
-
     {
         // solve using gpu
         tipl::time t("gpu time (ms):");

@@ -1,4 +1,4 @@
-#include "tipl/tipl.hpp"
+#include "TIPL/tipl.hpp"
 #include <iostream>
 #include <cuda.h>
 #include <cuda_runtime.h>
