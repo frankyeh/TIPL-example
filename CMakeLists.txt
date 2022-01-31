@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.17)
 project(TIPL-example VERSION 1.0.0 LANGUAGES CXX)
 include(CTest)
+option(ENABLE_CUDA "Enable using CUDA" OFF)
 find_package(TIPL REQUIRED)
 add_subdirectory(cpp)
+
+if( ENABLE_CUDA )
+add_subdirectory(cuda/image_linear_registration)
+add_subdirectory(cuda/image_resample)
+endif()
