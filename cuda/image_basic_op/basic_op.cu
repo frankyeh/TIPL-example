@@ -32,14 +32,6 @@ int main(void)
     }
     // use multi thread
     {
-        tipl::time t("simple multithread time:");
-
-        (hto = hfrom[hfrom > 0]*5.5f+100.0f)
-                >> tipl::backend::mt();
-
-    }
-    // use multi thread
-    {
         tipl::time t("par_for multi-thread time:");
 
         tipl::par_for(hfrom.size(),[&](size_t i)
