@@ -23,11 +23,30 @@ int main(void)
 
     // 3: get the transformed image
     tipl::image<3> hto(hfrom.shape());
+    tipl::transformation_matrix<float> trans0(tipl::affine_transform<float>(),
+                                              hfrom.shape(),voxel_size,hto.shape(),voxel_size);
     tipl::transformation_matrix<float> trans(affine,hfrom.shape(),voxel_size,hto.shape(),voxel_size);
     tipl::resample_mt(hfrom,hto,trans);
 
     // 4: now use transformed image to calculate the transformation
     bool terminated = false;
+    {
+        tipl::reg::mutual_information mi;
+        {
+            tipl::time t("cpu time for cost function:");
+            for(unsigned int i = 0;i < 20;++i)
+                mi(hfrom,hto,trans0);
+        }
+
+        tipl::reg::mutual_information_cuda mi2;
+        {
+            tipl::time t("gpu time for cost function:");
+            for(unsigned int i = 0;i < 20;++i)
+                mi2(hfrom,hto,trans0);
+        }
+
+    }
+
     {
         // solve using cpu
         tipl::time t("cpu time (ms):");
@@ -36,6 +55,7 @@ int main(void)
                 (hto,voxel_size,hfrom,voxel_size,answer,tipl::reg::affine,terminated,0.001);
         std::cout << "cpu answer:\n" << answer << std::endl;
     }
+
     {
         // solve using gpu
         tipl::time t("gpu time (ms):");
