@@ -25,6 +25,7 @@ int main(void)
         std::cout << "cannot find the sample file" << std::endl;
         return 1;
     }
+
     tipl::vector<3> voxel_size(1.0f,1.0f,1.0f);
 
     // 2: setup the transformation to generate a warpped image
@@ -124,16 +125,16 @@ int main(void)
     }
 
     {
-        tipl::host_image<3,tipl::vector<3> > d;
         tipl::time t("  nonlinear registration using gpu:");
         bool terminated = false;
-        tipl::reg::cdm_cuda(hfrom,hto,d,terminated);
-        dis = d;
+        ddis.swap(decltype(ddis)(ddis.shape()));
+        tipl::reg::cdm_cuda(dfrom,dto,ddis,terminated);
+
     }
 
     {
         tipl::image<3> to_;
-        tipl::compose_displacement(hto,dis,to_);
+        tipl::compose_displacement(hto,tipl::host_image<3,tipl::vector<3>>(ddis),to_);
         std::cout << "  image correlation:" <<
             tipl::correlation(hfrom.begin(),hfrom.end(),to_.begin()) << std::endl;
         to_.save_to_file<tipl::io::nifti>("gpu_result.nii");
