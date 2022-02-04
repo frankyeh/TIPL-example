@@ -70,6 +70,7 @@ int main(void)
         tipl::time t("  solve poisson using gpu:");
         bool terminated = false;
         tipl::reg::cdm_solve_poisson_cuda(ddis,terminated);
+        cudaDeviceSynchronize();
     }
     check_dif(dis,ddis);
 
