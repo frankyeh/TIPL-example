@@ -12,8 +12,10 @@ set(SOURCES
 add_executable(tipl_image_basic_op ${SOURCES})
 
 set_target_properties(tipl_image_basic_op PROPERTIES CXX_STANDARD 17 CXX_EXTENSIONS NONE)
+set_property(TARGET tipl_image_basic_op PROPERTY CUDA_ARCHITECTURES 60 70 75)
 
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -allow-unsupported-compiler --extended-lambda")
+set(CMAKE_CUDA_RUNTIME_LIBRARY "Static")
 
 target_compile_definitions(tipl_image_basic_op PUBLIC TIPL_USE_CUDA)
 
@@ -24,5 +26,5 @@ else()
   target_link_libraries(tipl_image_basic_op TIPL::tipl)
 endif()
 
-target_link_libraries(tipl_image_basic_op ${CUDA_LIBRARIES} ${CUDA_CUBLAS_LIBRARIES})
+target_link_libraries(tipl_image_basic_op ${CUDA_LIBRARIES})
 
