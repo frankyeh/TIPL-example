@@ -46,6 +46,7 @@ int main(void)
         tipl::time t("gpu resample time:");
         for(int i = 0;i < 100;++i)
             tipl::resample_cuda(dfrom,dto,trans);
+        cudaDeviceSynchronize();
     }
     // copy device image to host and save
     tipl::host_image<3>(dto).save_to_file<tipl::io::nifti>("gpu.nii");
