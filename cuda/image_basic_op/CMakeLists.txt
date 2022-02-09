@@ -18,11 +18,12 @@ set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -allow-unsupported-compiler --extended
 set(CMAKE_CUDA_RUNTIME_LIBRARY "Static")
 
 target_compile_definitions(tipl_image_basic_op PUBLIC TIPL_USE_CUDA)
-
-if(EXISTS "${TIPL_DIR}")
-  include_directories(tipl_image_basic_op ${TIPL_DIR})
+find_package(TIPL)
+if ( NOT TIPL_FOUND )
+  if(EXISTS "${TIPL_DIR}")
+    target_include_directories(tipl_image_basic_op ${TIPL_DIR})
+  endif()
 else()
-  find_package(TIPL REQUIRED)
   target_link_libraries(tipl_image_basic_op TIPL::tipl)
 endif()
 

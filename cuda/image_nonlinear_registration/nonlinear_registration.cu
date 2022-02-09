@@ -80,7 +80,6 @@ int main(void)
     {
         tipl::time t("  accumulate displacement using cpu:");
         float theta = 0.0;
-        bool terminated = false;
         tipl::reg::cdm_accumulate_dis(dis,dis,theta,0.5f);
         std::cout << "  theta=" << theta << std::endl;
     }
@@ -88,7 +87,6 @@ int main(void)
     {
         tipl::time t("  accumulate displacement using gpu:");
         float theta = 0.0;
-        bool terminated = false;
         tipl::reg::cdm_accumulate_dis_cuda(ddis,ddis,theta,0.5f);
         std::cout << "  theta=" << theta << std::endl;
     }
@@ -108,12 +106,14 @@ int main(void)
 
     check_dif(dis,ddis);
 
-    std::cout << "\n==Emsumble TEST: nonlinear registration==" << std::endl;
+    std::cout << "\n==Ensemble TEST: nonlinear registration==" << std::endl;
 
     {
         tipl::time t("  nonlinear registration using cpu:");
         bool terminated = false;
-        dis.swap(decltype(dis)(dis.shape()));
+
+ 				tipl::image<3,tipl::vector<3> > dis_tmp(dis.shape());
+        dis.swap(dis_tmp);
         tipl::reg::cdm(hfrom,hto,dis,terminated);
     }
 
@@ -128,7 +128,8 @@ int main(void)
     {
         tipl::time t("  nonlinear registration using gpu:");
         bool terminated = false;
-        ddis.swap(decltype(ddis)(ddis.shape()));
+				tipl::device_image<3,tipl::vector<3> > ddis_tmp(ddis.shape());
+        ddis.swap(ddis_tmp);
         tipl::reg::cdm_cuda(dfrom,dto,ddis,terminated);
 
     }

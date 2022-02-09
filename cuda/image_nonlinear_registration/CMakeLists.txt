@@ -16,11 +16,12 @@ set_target_properties(tipl_image_nonlinear_registration PROPERTIES CXX_STANDARD 
 set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -allow-unsupported-compiler --extended-lambda")
 
 target_compile_definitions(tipl_image_nonlinear_registration PUBLIC TIPL_USE_CUDA)
-
-if(EXISTS "${TIPL_DIR}")
-  include_directories(tipl_image_nonlinear_registration ${TIPL_DIR})
+find_package(TIPL)
+if ( NOT TIPL_FOUND )
+  if(EXISTS "${TIPL_DIR}")
+    target_include_directories(tipl_image_nonlinear_registration ${TIPL_DIR})
+  endif()
 else()
-  find_package(TIPL REQUIRED)
   target_link_libraries(tipl_image_nonlinear_registration TIPL::tipl)
 endif()
 
