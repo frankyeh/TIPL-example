@@ -17,10 +17,12 @@ set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -allow-unsupported-compiler --extended
 
 target_compile_definitions(tipl_image_resample PUBLIC TIPL_USE_CUDA)
 
-if(EXISTS "${TIPL_DIR}")
-  include_directories(tipl_image_resample ${TIPL_DIR})
+find_package(TIPL)
+if ( NOT TIPL_FOUND )
+  if(EXISTS "${TIPL_DIR}")
+    target_include_directories(tipl_image_resample ${TIPL_DIR})
+  endif()
 else()
-  find_package(TIPL REQUIRED)
   target_link_libraries(tipl_image_resample TIPL::tipl)
 endif()
 
