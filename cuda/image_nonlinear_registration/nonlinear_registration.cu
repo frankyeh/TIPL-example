@@ -80,14 +80,16 @@ int main(void)
     {
         tipl::time t("  accumulate displacement using cpu:");
         float theta = 0.0;
-        tipl::reg::cdm_accumulate_dis(dis,dis,theta,0.5f);
+        tipl::image<3,tipl::vector<3> > out;
+        tipl::reg::cdm_accumulate_dis(dis,dis,out,theta,0.5f);
         std::cout << "  theta=" << theta << std::endl;
     }
 
     {
         tipl::time t("  accumulate displacement using gpu:");
         float theta = 0.0;
-        tipl::reg::cdm_accumulate_dis_cuda(ddis,ddis,theta,0.5f);
+        tipl::device_image<3,tipl::vector<3> > out;
+        tipl::reg::cdm_accumulate_dis_cuda(ddis,ddis,out,theta,0.5f);
         std::cout << "  theta=" << theta << std::endl;
     }
     check_dif(dis,ddis);
