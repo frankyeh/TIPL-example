@@ -2,18 +2,26 @@
 
 Template Image Processing Library (TIPL) is a lightweight C++ template library designed mainly for medical imaging processing. The design paradigm is to provide an "easy-to-use" and also "ready-to-use" library. You need only to include the header files to use it. There is no need to build the source codes.
 
-##Design paradigm
+## Design paradigm
 
-A lot of the image processing libraries are designed for experimental/research purposes and do not meet the industrial standard. Consequently, the performance of the codes is not optimal, and the library can be hard to read and use. The design of TIPL follows several coding guidelines and principles that make it highly efficient and reusable. The following is the main paradigm behind TIPL.
+A lot of the image processing libraries are designed for experimental/research purposes and do not meet the industrial standard. The performance of the codes is suboptimal, and the library can be hard to read and use. The design of TIPL follows several coding guidelines and principles that make it highly efficient and reusable. The following is the main paradigm behind TIPL.
 
-- Decouple image type and image processing method. Most of the image processing libraries are limited to their defined image type. TIPL is not. You may use a pointer or any kind of memory block to as the input. This reduces unnecessary memory storage and copy.
+- Decouple image type and image processing method: 
+Most of the image processing libraries are limited to their defined image type. TIPL is not. You may use a pointer or any kind of memory block to as the input. This reduces unnecessary memory storage and copy.
 
-- Not limited to RGB pixel type. In medical imaging, the most common pixel type is "short" or "float", not the RGB value. TIPL makes no assumption on the pixel type to achieve the best applicability..
+- Not limited to RGB pixel type: 
+In medical imaging, the most common pixel type is "short" or "float", not the RGB value. TIPL makes no assumption on the pixel type to achieve the best applicability..
 
-- No class inheritance, no hidden functions or interfaces. Class inheritance is known to cause programs in code maintenance and it is not friendly for library users to customize the library. TIPL combines template-based interfaces with C-style interfaces to provide a "flat" library structures that is easy to maintain and modify. The connections between header files are thereby minimized. 
+- Minimize class inheritance:
+Class inheritance is known to cause difficulties in code maintenance and unfriendly for extensions. TIPL uses template variable coupling to minimize the need for inheritance unless a strong case for inheritance is suggested. This provide a "flat" library structures that is easy to maintain and modify. 
+
+- Minimize between-header dependency:
+TIPL couples function and type at very late stage in the cpp to reduce header dependency. This allows for fast compilation time and achieve better abstraction. 
 
 
 ## Installation
+
+TIPL is header only. You may clon the repo or use CMake to install the package.
 
 1. Get header files from Github
 
