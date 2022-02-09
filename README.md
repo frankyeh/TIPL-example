@@ -4,13 +4,15 @@ Template Image Processing Library (TIPL) is a lightweight C++ template library d
 
 ## Design paradigm
 
-A lot of the image processing libraries are designed for experimental/research purposes and do not meet the industrial standard. The performance of the codes is suboptimal, and the library can be hard to read and use. The design of TIPL follows several coding guidelines and principles that make it highly efficient and reusable. The following is the main paradigm behind TIPL.
+Most image processing libraries are not designed for medical image analysis and have suboptimal performance. TIPL was developed for high-performance medical analysis. The design paradigm follows several coding guidelines and principles that make it highly efficient and reusable. 
+
+The following is the main paradigm behind TIPL:
 
 - Decouple image type and image processing method: 
 Most of the image processing libraries are limited to their defined image type. TIPL is not. You may use a pointer or any kind of memory block to as the input. This reduces unnecessary memory storage and copy.
 
 - Not limited to RGB pixel type: 
-In medical imaging, the most common pixel type is "short" or "float", not the RGB value. TIPL makes no assumption on the pixel type to achieve the best applicability..
+In medical imaging, the most common pixel type is "short" or "float", not the RGB value. TIPL makes no assumption on the pixel type to achieve the best applicability.
 
 - Minimize class inheritance:
 Class inheritance is known to cause difficulties in code maintenance and unfriendly for extensions. TIPL uses template variable coupling to minimize the need for inheritance unless a strong case for inheritance is suggested. This provide a "flat" library structures that is easy to maintain and modify. 
@@ -18,6 +20,8 @@ Class inheritance is known to cause difficulties in code maintenance and unfrien
 - Minimize between-header dependency:
 TIPL couples function and type at very late stage in the cpp to reduce header dependency. This allows for fast compilation time and achieve better abstraction. 
 
+- Avoid using plateform dependency functions or syntax:
+TIPL will be compiled against MSVC, CLANG, and GCC to ensure the best cross-platform capability.
 
 ## Installation
 
