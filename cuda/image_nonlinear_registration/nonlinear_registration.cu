@@ -16,34 +16,26 @@ void check_dif(T& lhs,U& rhs)
 int main(void)
 {
     tipl::image<3> hfrom,hto;
-    tipl::image<3,tipl::vector<3> > dis;
+    tipl::image<3,tipl::vector<3> > dis,inv_dis;
 
     // 1: load example image
 
-    if(!hfrom.load_from_file<tipl::io::nifti>("100206_T1w.nii"))
+    if(!hfrom.load_from_file<tipl::io::nifti>("100206_T1w.nii") ||
+       !hto.load_from_file<tipl::io::nifti>("mni_icbm152_t1.nii"))
     {
         std::cout << "cannot find the sample file" << std::endl;
         return 1;
     }
+    tipl::filter::gaussian(hfrom);
+    tipl::filter::gaussian(hfrom);
+    tipl::filter::gaussian(hto);
 
-    tipl::vector<3> voxel_size(1.0f,1.0f,1.0f);
-
-    // 2: setup the transformation to generate a warpped image
-    tipl::affine_transform<float> affine = {0,0,0,0,0,0,1.1f,1.2f,0.95f,0.01f,0,0.005f};
-    std::cout << affine << std::endl;
-
-
-    // 3: get the transformed image
-    hto.resize(hfrom.shape());
-    tipl::transformation_matrix<float> trans(affine,hfrom.shape(),tipl::v(1,1,1),hto.shape(),tipl::v(1,1,1));
-    tipl::resample_mt(hfrom,hto,trans);
-
-    std::cout << "image correlation:" << tipl::correlation(hfrom.begin(),hfrom.end(),hto.begin()) << std::endl;
+    std::cout << "initial correlation:" << tipl::correlation(hfrom.begin(),hfrom.end(),hto.begin()) << std::endl;
 
 
     // 4: Copy host image to device
     tipl::device_image<3> dfrom(hfrom), dto(hto);
-    tipl::device_image<3,tipl::vector<3> > ddis(hto.shape());
+    tipl::device_image<3,tipl::vector<3> > ddis(hto.shape()),inv_ddis(hto.shape());
 
 
     std::cout << "\n==TEST 1: gradient calculation==" << std::endl;
@@ -106,6 +98,26 @@ int main(void)
 
     check_dif(dis,ddis);
 
+
+    std::cout << "\n==TEST 5: invert displacement==" << std::endl;
+    ddis = dis;
+    {
+        inv_dis.clear();
+        inv_dis.resize(dis.shape());
+        tipl::time t("  inverse displacement using cpu:");
+        tipl::invert_displacement_imp(dis,inv_dis);
+    }
+
+    {
+        inv_ddis.clear();
+        inv_ddis.resize(dis.shape());
+        tipl::time t("  inverse displacement using gpu:");
+        tipl::invert_displacement_cuda_imp(ddis,inv_ddis);
+    }
+
+    check_dif(inv_dis,inv_ddis);
+
+
     std::cout << "\n==Ensemble TEST: nonlinear registration==" << std::endl;
 
     {
@@ -114,15 +126,15 @@ int main(void)
 
  				tipl::image<3,tipl::vector<3> > dis_tmp(dis.shape());
         dis.swap(dis_tmp);
-        tipl::reg::cdm(hfrom,hto,dis,terminated);
+        tipl::reg::cdm(hfrom,hto,dis,inv_dis,terminated);
     }
 
     {
-        tipl::image<3> to_;
-        tipl::compose_displacement(hto,dis,to_);
+        tipl::image<3> from_;
+        tipl::compose_displacement(hfrom,inv_dis,from_);
         std::cout << "  image correlation:" <<
-            tipl::correlation(hfrom.begin(),hfrom.end(),to_.begin()) << std::endl;
-        to_.save_to_file<tipl::io::nifti>("cpu_result.nii");
+            tipl::correlation(hto.begin(),hto.end(),from_.begin()) << std::endl;
+        from_.save_to_file<tipl::io::nifti>("cpu_result.nii");
     }
 
     {
@@ -130,16 +142,16 @@ int main(void)
         bool terminated = false;
 				tipl::device_image<3,tipl::vector<3> > ddis_tmp(ddis.shape());
         ddis.swap(ddis_tmp);
-        tipl::reg::cdm_cuda(dfrom,dto,ddis,terminated);
+        tipl::reg::cdm_cuda(dfrom,dto,ddis,inv_ddis,terminated);
 
     }
 
     {
-        tipl::image<3> to_;
-        tipl::compose_displacement(hto,tipl::host_image<3,tipl::vector<3>>(ddis),to_);
+        tipl::image<3> from_;
+        tipl::compose_displacement(hfrom,tipl::host_image<3,tipl::vector<3> >(inv_ddis),from_);
         std::cout << "  image correlation:" <<
-            tipl::correlation(hfrom.begin(),hfrom.end(),to_.begin()) << std::endl;
-        to_.save_to_file<tipl::io::nifti>("gpu_result.nii");
+            tipl::correlation(hto.begin(),hto.end(),from_.begin()) << std::endl;
+        from_.save_to_file<tipl::io::nifti>("gpu_result.nii");
     }
 
     return 0;
