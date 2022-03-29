@@ -70,16 +70,14 @@ int main(void)
     std::cout << "\n==TEST 3: accumulate dis==" << std::endl;
 
     {
-        tipl::time t("  accumulate displacement using cpu:");
-        float theta = 0.0;
-        tipl::reg::cdm_accumulate_dis(dis,dis,theta,0.5f);
+        tipl::time t("  maximum displacement using cpu:");
+        float theta = tipl::reg::cdm_max_displacement_length(dis);
         std::cout << "  theta=" << theta << std::endl;
     }
 
     {
-        tipl::time t("  accumulate displacement using gpu:");
-        float theta = 0.0;
-        tipl::reg::cdm_accumulate_dis_cuda(ddis,ddis,theta,0.5f);
+        tipl::time t("  maximum displacement using gpu:");
+        float theta = tipl::reg::cdm_max_displacement_length_cuda(ddis);
         std::cout << "  theta=" << theta << std::endl;
     }
     check_dif(dis,ddis);
@@ -88,12 +86,12 @@ int main(void)
 
     {
         tipl::time t("  constraint displacement using cpu:");
-        tipl::reg::cdm_constraint(dis,1.0f);
+        tipl::reg::cdm_constraint(dis);
     }
 
     {
         tipl::time t("  constraint displacement using gpu:");
-        tipl::reg::cdm_constraint_cuda(ddis,1.0f);
+        tipl::reg::cdm_constraint_cuda(ddis);
     }
 
     check_dif(dis,ddis);
