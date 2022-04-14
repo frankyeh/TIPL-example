@@ -13,6 +13,8 @@ int main(void)
         std::cout << "cannot find the sample file" << std::endl;
         return 1;
     }
+    tipl::downsample_with_padding(hfrom);
+    tipl::downsample_with_padding(hfrom);
     tipl::vector<3> voxel_size(1.0f,1.0f,1.0f);
 
 
@@ -54,8 +56,8 @@ int main(void)
         std::cout << "\nsolve using cpu" << std::endl;
         tipl::time t("cpu time (ms):");
         tipl::affine_transform<float> answer;
-        tipl::reg::linear_mr<tipl::reg::mutual_information> // use cpu multithread to calculate the cost function
-                (hto,voxel_size,hfrom,voxel_size,answer,tipl::reg::affine,terminated,0.001);
+        tipl::reg::linear_two_way<tipl::reg::mutual_information> // use cpu multithread to calculate the cost function
+                (hto,voxel_size,hfrom,voxel_size,answer,tipl::reg::affine,[&](void){return terminated;});
         std::cout << "cpu answer:\n" << answer;
     }
 
@@ -63,8 +65,8 @@ int main(void)
         std::cout << "\nsolve using gpu" << std::endl;
         tipl::time t("gpu time (ms):");
         tipl::affine_transform<float> answer;
-        tipl::reg::linear_mr<tipl::reg::mutual_information_cuda> // use cuda to calculate the cost function
-                (hto,voxel_size,hfrom,voxel_size,answer,tipl::reg::affine,terminated,0.001);
+        tipl::reg::linear_two_way<tipl::reg::mutual_information_cuda> // use cuda to calculate the cost function
+                (hto,voxel_size,hfrom,voxel_size,answer,tipl::reg::affine,[&](void){return terminated;});
         std::cout << "gpu answer:\n" << answer;
         std::cout << cudaGetErrorName(cudaGetLastError()) << std::endl;
     }
