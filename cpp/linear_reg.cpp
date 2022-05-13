@@ -24,7 +24,7 @@ int main(void)
     bool terminated = false;
     tipl::reg::linear<tipl::reg::correlation>(It,vs_t,Is,vs_s,T,
                                  tipl::reg::affine,
-                                 terminated,0.01);
+                                 [&](void){return terminated;},0.01);
 
     std::cout << T;
 
