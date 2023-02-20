@@ -19,9 +19,9 @@ set(CMAKE_CUDA_RUNTIME_LIBRARY "Static")
 
 target_compile_definitions(tipl_image_resample PUBLIC TIPL_USE_CUDA)
 if(TIPL_HOME)
-    target_include_directories(tipl_basic_op PUBLIC ${TIPL_HOME})
+    target_include_directories(tipl_image_resample PUBLIC ${TIPL_HOME})
 else ()
-    target_link_libraries(tipl_basic_op TIPL::tipl)
+    target_link_libraries(tipl_image_resample TIPL::tipl)
 endif()
 
 target_link_libraries(tipl_image_resample ${CUDA_LIBRARIES})
